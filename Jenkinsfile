@@ -11,8 +11,7 @@ pipeline {
         stage('Clone Code') {
             steps {
                 git branch: "${BRANCH}",
-                    url: "${REPO_URL}",
-                    credentialsId: 'github-token'
+                    url: "${REPO_URL}"
             }
         }
 
@@ -30,18 +29,7 @@ pipeline {
             steps {
                 sh '''
                 . venv/bin/activate
-                python manage.py test || true
-                '''
-            }
-        }
-
-        stage('Push to GitHub') {
-            steps {
-                sh '''
-                git status
-                git add .
-                git commit -m "Auto deploy via Jenkins" || true
-                git push origin main
+                python manage.py test
                 '''
             }
         }
@@ -49,10 +37,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Code pushed → Render auto deployment started"
+            echo "✅ CI passed. Render will auto-deploy from GitHub."
         }
         failure {
-            echo "❌ Jenkins pipeline failed"
+            echo "❌ CI failed. Fix errors before merge."
         }
     }
 }
