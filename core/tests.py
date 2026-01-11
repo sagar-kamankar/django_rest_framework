@@ -16,8 +16,8 @@ class ItemAPITestCase(APITestCase):
         Test POST /api/items/
         """
         data = {
-            "name": "test Item",
-            "desc": "test Description"
+            "name": "Test Item",
+            "desc": "Test Description"
         }
         response = self.client.post('/api/items/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
