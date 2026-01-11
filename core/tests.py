@@ -16,7 +16,7 @@ class ItemAPITestCase(APITestCase):
         Test POST /api/items/
         """
         data = {
-            "name": "test Item",
+            "name": "Test Item",
             "desc": "Test Description"
         }
         response = self.client.post('/api/items/', data, format='json')
