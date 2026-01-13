@@ -26,9 +26,7 @@ SECRET_KEY = 'django-insecure-=o@3fxa#63yqc7lc^vke#f0x72-e&-dt^ll&qhq1gwnb86bk$d
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "django-rest-framework-jbms.onrender.com",
-    "localhost",
-    "127.0.0.1",
+    "*"
 ]
 
 
