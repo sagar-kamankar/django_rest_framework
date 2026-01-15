@@ -21,4 +21,5 @@ COPY . .
 EXPOSE 8000
 
 # 8️⃣ Run app with Gunicorn (PRODUCTION)
-CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && gunicorn myproject.wsgi:application --bind 0.0.0.0:8000"]
+
