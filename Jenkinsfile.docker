@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    environment {
+        RENDER_DEPLOY_HOOK = credentials('RENDER_DOCKER_DEPLOY_HOOK')
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/sagar-kamankar/django_rest_framework.git'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install -r requirements.txt
+                python manage.py test
+                '''
+            }
+        }
+
+        stage('Build Docker Image (CI Validation)') {
+            steps {
+                sh '''
+                docker build -t django-docker-ci .
+                '''
+            }
+        }
+
+        stage('Deploy to Render (Only if CI Passed)') {
+            steps {
+                sh '''
+                curl -X POST "$RENDER_DEPLOY_HOOK"
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Docker CI passed → Render deployment triggered"
+        }
+        failure {
+            echo "❌ CI failed → Render deployment NOT triggered"
+        }
+    }
+}
